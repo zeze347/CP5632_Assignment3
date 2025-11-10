@@ -2,7 +2,10 @@ import requests
 
 GEOCODE_URL = "https://geocoding-api.open-meteo.com/v1/search"
 FORECAST_URL = "https://api.open-meteo.com/v1/forecast"
-TIMEOUT_SECONDS = 10
+WIKI_SUMMARY_URL = "https://en.wikipedia.org/api/rest_v1/page/summary/"
+HEADERS = {
+    "User-Agent": "CP5632_Assignment_WeatherApp/1.0 (student project)"
+}
 
 
 def main():
@@ -19,6 +22,10 @@ def main():
 
     print(f"Time：{time}")
     print(f"Current temperature：{temperature} °C")
+
+    summary = get_city_summary(city_name)
+    print(f"Here is a summary of {city_name}:")
+    print(summary)
 
 
 def geocode_city(city_name):
@@ -45,6 +52,15 @@ def get_weather(latitude, longitude):
     temperature_2m = current_weather.get("temperature_2m")
     time = current_weather.get("time")
     return temperature_2m, time
+
+
+def get_city_summary(city_name):
+    page_title = city_name.replace(" ", "_")
+    url = WIKI_SUMMARY_URL + page_title
+    summary_result = requests.get(url, headers=HEADERS)
+    summary_data = summary_result.json()
+    summary = summary_data.get("extract")
+    return summary
 
 
 if __name__ == "__main__":
