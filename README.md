@@ -27,7 +27,13 @@ Open Terminal / Command Prompt based on your operating system:
 - Linux: Search for Terminal from applications menu
 
 In the terminal, type the following command and press Enter:"pip install requests"
-On macOS / Linux, if pip doesn't work, try:"pip3 install requests"
+On macOS / Linux, if pip doesn't work, try:
+
+```python
+pip3
+install
+requests
+```
 
 ### How to run
 
@@ -43,7 +49,7 @@ If the city is valid, the program will:
 
 ## APIs Use
 
-| API  / Name              | / Purpose                                          | / Documentation Link                                                           |
+| API                      | Purpose                                            | Documentation Link                                                             |
 |--------------------------|----------------------------------------------------|--------------------------------------------------------------------------------|
 | Open-Meteo Geocoding API | Convert city name into latitude & longitude        | https://open-meteo.com/en/docs/geocoding-api                                   |
 | Open-Meteo Forecast API  | Get current temperature using latitude & longitude | https://open-meteo.com/en/docs                                                 |
@@ -64,6 +70,7 @@ longitude = location_results[0].get("longitude")
 Next, we pass the latitude and longitude to the [Open-Meteo Forecast API](https://api.open-meteo.com/v1/forecast), which
 returns a JSON containing the
 current_weather. We then extract the temperature and time fields from this JSON.
+
 ```python
 weather_params = {"latitude": latitude, "longitude": longitude, "current": "temperature_2m",
                   "timezone": "auto"}
@@ -71,15 +78,33 @@ weather_result = requests.get(FORECAST_URL, params=weather_params, timeout=REQUE
 weather_data = weather_result.json()
 current_weather = weather_data.get("current")
 ```
+
 Finally, we input the names of the cities into
 the [Wikipedia Summary API](https://en.wikipedia.org/api/rest_v1/page/summary/).Add the name of the city after the
 URL.The API will then return a field named "extract", which contains the brief introduction of the city.
+
 ```python
 url = WIKI_SUMMARY_URL + page_title
 summary_result = requests.get(url, headers=HEADERS, timeout=REQUEST_TIMEOUT)
 summary_data = summary_result.json()
 summary = summary_data.get("extract")
 ```
+
+## Reflection
+
+Before starting this assignment, my understanding of APIs was merely at the conceptual level, and I had never actually
+implemented the functionality for API interaction. After the project began, the biggest challenge was understanding the
+Json data returned by the API. The data returned by each API is different, and the documentation doesn't tell me which
+fields are the ones I need. What I did was to continuously print the content of the Json to observe which fields were
+the key information I needed (such as `latitude` and `longitude`)
+And, when writing the program, I encountered many problems. I found that many city names are duplicated across
+multiple countries, or are not recorded in Wikipedia, etc. To address these issues, I added input validation to check if
+`results` is empty, and used `try/except` to catch and handle any exceptions. In addition, I found that the Open-Meteo
+Geocoding API can locate some small cities and even rural areas. However, most unknown cities may not be recorded in
+Wikipedia. The solution is to check the `feature_code` when parsing the JSON data returned by the Geocoding API, to
+ensure that the input city does not include small towns.Overall, this assignment enabled me to truly master the
+interaction with real-time online APIs, understand the JSON data structure, learn to extract the required fields from
+it, and enhance my debugging skills and problem-solving abilities.
 
 
 
