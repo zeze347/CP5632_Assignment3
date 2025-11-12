@@ -9,34 +9,33 @@ HEADERS = {
 
 
 def main():
-    while True:
+    city_name = get_valid_city()
+    location = geocode_city(city_name)
+    while location is None:
+        print("City not found. Please try again.\n")
         city_name = get_valid_city()
         location = geocode_city(city_name)
-        if location is None:
-            print("City not found. Please try again.")
-            continue
-        latitude, longitude = location
-        break
-
+    latitude, longitude, timezone = location
     temperature, time = get_weather(latitude, longitude)
 
-    print(f"Time：{time}")
+    print(f"Time：{time}, timezone:{timezone}")
     print(f"Current temperature：{temperature} °C")
 
     summary = get_city_summary(city_name)
     print(f"Here is a summary of {city_name}:")
     print(summary)
 
+
 def get_valid_city():
-    while True:
+    city_name = ""
+    while not city_name or city_name.isdigit():
         city_name = input("Enter a city name: ").strip()
         if not city_name:
             print("City name cannot be empty. Please try again.\n")
-            continue
         elif city_name.isdigit():
             print("City name cannot be numbers only. Please try again.\n")
-            continue
-        return city_name
+    return city_name
+
 
 def geocode_city(city_name):
     try:
@@ -50,7 +49,8 @@ def geocode_city(city_name):
             return None
         latitude = location_results[0].get("latitude")
         longitude = location_results[0].get("longitude")
-        return latitude, longitude
+        timezone = location_results[0].get("timezone")
+        return latitude, longitude, timezone
 
     except (KeyError, IndexError, TypeError):
         return None
@@ -81,7 +81,6 @@ def get_city_summary(city_name):
 
     except KeyError:
         return "Unexpected data format from Wikipedia."
-
 
 
 if __name__ == "__main__":
