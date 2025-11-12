@@ -49,10 +49,10 @@ If the city is valid, the program will:
 | Open-Meteo Forecast API  | Get current temperature using latitude & longitude | https://open-meteo.com/en/docs                                                 |
 | Wikipedia Summary API    | Return a short summary of the city                 | https://en.wikipedia.org/api/rest_v1/#/Page%20content/get_page_summary__title_ |
 
-### 1. Open-Meteo Geocoding API
+### Understanding How the Program Uses APIs
 
 In the program, we first ask the user to input a city name, and then send this name to
-the [OpeOpen-Meteo Geocoding API](https://geocoding-api.open-meteo.com/v1/search）.
+the [OpeOpen-Meteo Geocoding API](https://geocoding-api.open-meteo.com/v1/search).
 This API will return JSON data, which contains geographical information. We extract two fields from it: latitude and
 longitude, as they are the parameters required for weather queries.
 
@@ -64,10 +64,22 @@ longitude = location_results[0].get("longitude")
 Next, we pass the latitude and longitude to the [Open-Meteo Forecast API](https://api.open-meteo.com/v1/forecast), which
 returns a JSON containing the
 current_weather. We then extract the temperature and time fields from this JSON.
+```python
+weather_params = {"latitude": latitude, "longitude": longitude, "current": "temperature_2m",
+                  "timezone": "auto"}
+weather_result = requests.get(FORECAST_URL, params=weather_params, timeout=REQUEST_TIMEOUT)
+weather_data = weather_result.json()
+current_weather = weather_data.get("current")
+```
 Finally, we input the names of the cities into
 the [Wikipedia Summary API](https://en.wikipedia.org/api/rest_v1/page/summary/).Add the name of the city after the
 URL.The API will then return a field named "extract", which contains the brief introduction of the city.
-
+```python
+url = WIKI_SUMMARY_URL + page_title
+summary_result = requests.get(url, headers=HEADERS, timeout=REQUEST_TIMEOUT)
+summary_data = summary_result.json()
+summary = summary_data.get("extract")
+```
 
 
 
