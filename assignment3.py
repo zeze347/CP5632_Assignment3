@@ -19,21 +19,25 @@ HEADERS = {
 
 def main():
     """Main program: get a valid city, fetch weather and Wikipedia summary."""
-    city_name = get_valid_city()
-    location = geocode_city(city_name)
-    while location is None:
-        print("City not found. Please try again.\n")
+    choice = "y"
+    while choice.lower().startswith("y"):
         city_name = get_valid_city()
         location = geocode_city(city_name)
-    latitude, longitude, timezone = location
-    temperature, time = get_weather(latitude, longitude)
-    print(f"City: {city_name}\n"
-          f"Latitude:{latitude}, Longitude:{longitude}\n"
-          f"Time:{time}, timezone:{timezone}\n"
-          f"Current temperature：{temperature} °C")
-    summary = get_city_summary(city_name)
-    print(f"Here is a summary of {city_name}:")
-    print(summary)
+        while location is None:
+            print("City not found. Please try again.\n")
+            city_name = get_valid_city()
+            location = geocode_city(city_name)
+        latitude, longitude, timezone = location
+        temperature, time = get_weather(latitude, longitude)
+        print(f"City: {city_name}\n"
+              f"Latitude:{latitude}, Longitude:{longitude}\n"
+              f"Time:{time}, timezone:{timezone}\n"
+              f"Current temperature：{temperature} °C")
+        summary = get_city_summary(city_name)
+        print(f"Here is a summary of {city_name}:")
+        print(summary)
+        choice = input("Would you like to continue searching for other cities? (y/n): ").strip()
+    print("Thank you for using this program.")
 
 
 def get_valid_city():
