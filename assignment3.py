@@ -32,7 +32,7 @@ def main():
         print(f"City: {city_name}\n"
               f"Latitude:{latitude}, Longitude:{longitude}\n"
               f"Time:{time}, timezone:{timezone}\n"
-              f"Current temperature：{temperature} °C")
+              f"Current temperature：{temperature} °C\n")
         summary = get_city_summary(city_name)
         print(f"Here is a summary of {city_name}:")
         print(summary)
