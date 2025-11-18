@@ -26,14 +26,8 @@ Open Terminal / Command Prompt based on your operating system:
 - macOS: Press ⌘ + Space → type Terminal → press Enter
 - Linux: Search for Terminal from applications menu
 
-In the terminal, type the following command and press Enter:"pip install requests"
-On macOS / Linux, if pip doesn't work, try:
-
-```python
-pip3
-install
-requests
-```
+In the terminal, type the following command and press Enter:`pip install requests`
+On macOS / Linux, if pip doesn't work, try:`pip3 install requests`
 
 ### How to run
 
@@ -58,7 +52,7 @@ If the city is valid, the program will:
 ### Understanding How the Program Uses APIs
 
 In the program, we first ask the user to input a city name, and then send this name to
-the [OpeOpen-Meteo Geocoding API](https://geocoding-api.open-meteo.com/v1/search).
+the [Open-Meteo Geocoding API](https://geocoding-api.open-meteo.com/v1/search).
 This API will return JSON data, which contains geographical information. We extract two fields from it: latitude and
 longitude, as they are the parameters required for weather queries.
 
@@ -97,14 +91,22 @@ implemented the functionality for API interaction. After the project began, the 
 Json data returned by the API. The data returned by each API is different, and the documentation doesn't tell me which
 fields are the ones I need. What I did was to continuously print the content of the Json to observe which fields were
 the key information I needed (such as `latitude` and `longitude`)
-And, when writing the program, I encountered many problems. I found that many city names are duplicated across
-multiple countries, or are not recorded in Wikipedia, etc. To address these issues, I added input validation to check if
+And, when writing the program, I encountered many problems. To address these issues, I added input validation to check
+if
 `results` is empty, and used `try/except` to catch and handle any exceptions. In addition, I found that the Open-Meteo
 Geocoding API can locate some small cities and even rural areas. However, most unknown cities may not be recorded in
 Wikipedia. The solution is to check the `feature_code` when parsing the JSON data returned by the Geocoding API, to
 ensure that the input city does not include small towns.Overall, this assignment enabled me to truly master the
 interaction with real-time online APIs, understand the JSON data structure, learn to extract the required fields from
-it, and enhance my debugging skills and problem-solving abilities.
+it, and enhance my debugging skills and problem-solving abilities.  
 
+Furthermore, I also learned the importance of modular programming. At the beginning, I placed all the logic in the main
+function, which made my code very difficult to maintain. After splitting the logic into multiple small functions, the
+readability of my program became extremely high, making it very clear at a glance. The structure was also very clear,
+making it easy to debug and modify. I also realized that real APIs do not always return ideal data, so input validation
+and error handling are the key to the robustness of the program.
 
+## Conclusion
 
+This project gave me hands-on experience with working APIs, understanding JSON structures, and designing a robust Python
+program. It helped me gain confidence in both programming logic and data processing using real-world web services.
