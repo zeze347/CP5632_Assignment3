@@ -60,7 +60,7 @@ def geocode_city(city_name):
         geocode_data = location_result.json()
         location_results = geocode_data.get("results", [])
         result = location_results[0]
-        if result.get("feature_code") not in ("PPLC", "PPLA", "PPL"):
+        if result.get("feature_code") not in ("PPLC", "PPLA", "PPLA2", "PPLA3", "PPLA4", "PPL", "ADM2", "ADM3"):
             print("Found a location but it's not classified as a city.")
             return None
         latitude = location_results[0].get("latitude")
