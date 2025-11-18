@@ -53,14 +53,18 @@ def get_valid_city():
 
 
 def geocode_city(city_name):
-    """Return (latitude, longitude, timezone) if the name refers to a city (PPLC/PPLA)."""
+    """Return geographic information if the name refers to a city."""
     try:
         geocode_params = {"name": city_name, "count": 1, "language": "en"}
         location_result = requests.get(GEOCODE_URL, params=geocode_params, timeout=REQUEST_TIMEOUT)
         geocode_data = location_result.json()
         location_results = geocode_data.get("results", [])
         result = location_results[0]
-        if result.get("feature_code") not in ("PPLC", "PPLA", "PPLA2", "PPLA3", "PPLA4", "PPL", "ADM2", "ADM3"):
+        valid_codes = (
+            "PPLC", "PPLA", "PPLA2", "PPLA3",
+            "PPLA4", "PPL", "ADM2", "ADM3"
+        )
+        if result.get("feature_code") not in valid_codes:
             print("Found a location but it's not classified as a city.")
             return None
         latitude = location_results[0].get("latitude")
